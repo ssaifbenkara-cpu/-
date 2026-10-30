@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#205c45">
+<title>عَبَسَ</title>
+
+<style>
+:root {
+  --green:#205c45;
+  --bg:#f4f2ec;
+  --card:#fffdf8;
+  --text:#20362c;
+  --muted:#64736b;
+  --border:#d9dfd8;
+  --gold:#b58b42;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Tahoma,Arial,sans-serif;
+  line-height:1.9;
+}
+main{max-width:900px;margin:auto;padding:16px}
+header{
+  background:linear-gradient(135deg,#174b3a,#347456);
+  color:white;
+  text-align:center;
+  border-radius:18px;
+  padding:22px;
+}
+header h1{margin:0}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:18px;
+  margin-top:15px;
+  box-shadow:0 4px 14px #253b2b0a;
+}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.field{flex:1;min-width:220px}
+label{display:block;font-weight:bold;margin-bottom:5px}
+select,input,textarea,button{
+  width:100%;
+  padding:11px;
+  border:1px solid #c7d1c9;
+  border-radius:10px;
+  font:inherit;
+}
+button{cursor:pointer;font-weight:bold}
+.primary{background:var(--green);color:white;border-color:var(--green)}
+.secondary{background:#eee8dc}
+.options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:14px;
+}
+.question{
+  text-align:center;
+  padding:25px 10px;
+  font-size:1.2rem;
+  min-height:90px;
+}
+.quran{
+  font-family:"Amiri","Noto Naskh Arabic",Tahoma,serif;
+  font-size:1.9rem;
+  line-height:2.2;
+}
+.status{color:var(--muted);font-size:.9rem}
+.result{
+  display:none;
+  padding:14px;
+  border-radius:10px;
+  margin-top:12px;
+  white-space:pre-wrap;
+}
+.good{background:#e8f5eb;color:#17663a}
+.bad{background:#fbeaea;color:#a52b2b}
+.hidden{display:none!important}
+.progress{
+  height:8px;
+  background:#e5e9e4;
+  border-radius:20px;
+  overflow:hidden;
+}
+.bar{
+  height:100%;
+  width:0;
+  background:var(--gold);
+}
+.warning{
+  background:#fff3d5;
+  padding:12px;
+  border-radius:10px;
+  margin-top:12px;
+  font-size:.9rem;
+}
+@media(max-width:560px){
+  .options{grid-template-columns:1fr}
+  .field{min-width:100%}
+  .quran{font-size:1.55rem}
+}
+</style>
+</head>
+
+<body>
+<main>
+
+<header>
+<h1>عَبَسَ</h1>
+<p>مراجعة الحفظ القرآني</p>
+</header>
+
+<section class="card">
+
+<div class="row">
+<div class="field">
+<label>السورة</label>
+<select id="surah">
+<option value="20">طه — حفص عن عاصم</option>
+<option value="21">الأنبياء — حفص عن عاصم</option>
+<option value="75">القيامة — ورش عن نافع</option>
+<option value="76">الإنسان — ورش عن نافع</option>
+<option value="77">المرسلات — ورش عن نافع</option>
+<option value="78">النبأ — ورش عن نافع</option>
+<option value="79">النازعات — ورش عن نافع</option>
+<option value="80">عبس — ورش عن نافع</option>
+<option value="all">جميع السور المختارة</option>
+</select>
+</div>
+
+<div class="field">
+<label>نوع الاختبار</label>
+<select id="mode">
+<option value="writeText">رقم الآية ← أكتب نصها</option>
+<option value="identifyNumber">نص الآية ← أحدد رقمها</option>
+<option value="page">الآية ← أحدد رقم الصفحة</option>
+<option value="juz">الآية ← أحدد رقم الجزء</option>
+<option value="hizb">الآية ← أحدد رقم الحزب</option>
+<option value="rub">الآية ← أحدد ربع الحزب</option>
+<option value="mixed">اختبار شامل عشوائي</option>
+</select>
+</div>
+</div>
+
+<div class="row" style="margin-top:12px">
+<div class="field">
+<label>نطاق الأسئلة</label>
+<select id="scope">
+<option value="all">جميع آيات السورة المختارة</option>
+<option value="unseen">تجنب الأسئلة السابقة قدر الإمكان</option>
+</select>
+</div>
+
+<div class="field">
+<label>عدد الأسئلة</label>
+<select id="count">
+<option value="10">10 أسئلة</option>
+<option value="20">20 سؤالًا</option>
+<option value="30">30 سؤالًا</option>
+<option value="all">جميع الآيات</option>
+</select>
+</div>
+</div>
+
+<div class="warning">
+تنبيه: بيانات الصفحات والأحزاب يجب أن تطابق المصحف المعتمد.
+ترقيم مصحف ورش الجزائري ليس بالضرورة مطابقًا لمصحف المدينة ذي 604 صفحات.
+</div>
+
+<div class="options">
+<button class="primary" id="start">ابدأ المراجعة</button>
+<button class="secondary" id="reset">إعادة ضبط الأسئلة السابقة</button>
+</div>
+
+<p id="status" class="status">
+يلزم الاتصال بالإنترنت لتحميل بيانات القرآن.
+</p>
+</section>
+
+<section id="quiz" class="card hidden">
+
+<div>
+<span id="counter"></span>
+<div class="progress">
+<div id="bar" class="bar"></div>
+</div>
+</div>
+
+<div id="question" class="question"></div>
+<div id="answerArea"></div>
+
+<div class="options">
+<button id="check" class="primary">تحقق من الإجابة</button>
+</div>
+
+<div id="result" class="result"></div>
+
+<div class="options">
+<button id="next" class="primary hidden">السؤال التالي</button>
+<button id="stop" class="secondary">إنهاء المراجعة</button>
+</div>
+
+</section>
+
+<footer class="status" style="text-align:center;padding:20px">
+أداة مساعدة لمراجعة حفظ القرآن الكريم
+</footer>
+
+</main>
